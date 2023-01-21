@@ -1,7 +1,10 @@
+import 'package:eljur_students/dependency_injection.dart' as di;
+import 'package:eljur_students/features/eljur_auth/presentation/pages/auth_page.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
   runApp(const MyApp());
 }
 
@@ -15,34 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('BLoC using streams'),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: AnimatedContainer(
-          width: 100,
-          height: 100,
-          duration: const Duration(milliseconds: 500),
-          color: Colors.red,
-        ),
-      ),
+      home: const AuthPage(),
     );
   }
 }

@@ -1,9 +1,9 @@
 class UserInfo {
-  final int id;
-  final String firstName, middleName, lastName;
+  final String id, firstName, middleName, lastName;
 
-  UserInfo(this.id,
-      {required this.firstName,
+  UserInfo(
+      {required this.id,
+      required this.firstName,
       required this.middleName,
       required this.lastName});
 }
@@ -13,6 +13,8 @@ class TokenInfo {
   final DateTime expires;
 
   TokenInfo({required this.token, required this.expires});
+
+  bool get expired => DateTime.now().isAfter(expires);
 }
 
 class AuthInfo {

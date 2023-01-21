@@ -3,21 +3,18 @@ import 'package:dartz/dartz.dart';
 import 'package:eljur_students/core/usecases/usecase.dart';
 import 'package:eljur_students/features/eljur_auth/domain/repositories/accounts_repository.dart';
 
-import '../entities/account_entity.dart';
-
 class DeleteAccountParams {
-  final int accountId;
+  final String accountId;
 
-  DeleteAccountParams(this.accountId);
+  DeleteAccountParams({required this.accountId});
 }
 
-class DeleteAccountUseCase
-    implements UseCase<AccountEntity, DeleteAccountParams> {
+class DeleteAccountUseCase implements UseCase<void, DeleteAccountParams> {
   final AccountsRepository accountsRepository;
 
   DeleteAccountUseCase({required this.accountsRepository});
 
   @override
-  Future<Either<Failure, AccountEntity>> call(DeleteAccountParams params) =>
+  Future<Either<Failure, void>> call(DeleteAccountParams params) =>
       accountsRepository.deleteAccount(params.accountId);
 }

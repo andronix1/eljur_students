@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:eljur_students/core/errors/exceptions/cache_exception.dart';
 import 'package:eljur_students/core/errors/exceptions/server_exception.dart';
 import 'package:eljur_students/core/errors/failures/cache_failure.dart';
@@ -10,6 +12,8 @@ import 'package:eljur_students/features/eljur_auth/domain/repositories/accounts_
 
 import '../datasources/accounts_remote_data_source.dart';
 
+class AuthFailure extends Failure {}
+
 class AccountsRepositoryImpl implements AccountsRepository {
   final AccountsLocalDataSource localDataSource;
   final AccountsRemoteDataSource remoteDataSource;
@@ -18,7 +22,7 @@ class AccountsRepositoryImpl implements AccountsRepository {
       {required this.localDataSource, required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, AccountEntity>> deleteAccount(int id) async {
+  Future<Either<Failure, void>> deleteAccount(String id) async {
     try {
       return Right(await localDataSource.deleteAccountById(id));
     } on CacheException {
@@ -47,26 +51,26 @@ class AccountsRepositoryImpl implements AccountsRepository {
   @override
   Future<Either<Failure, AccountEntity>> login(AuthInfo authInfo) async {
     try {
-      final account = await remoteDataSource.authenticate();
+      final account = await remoteDataSource.authenticate(authInfo);
       await localDataSource.cacheAccount(account);
       return Right(account);
     } on CacheException {
       return Left(CacheFailure());
     } on ServerException {
       return Left(ServerFailure());
+    } on AuthException {
+      return Left(AuthFailure());
     }
   }
 
   @override
-  Future<Either<Failure, AccountEntity>> logout() async {
+  Future<Either<Failure, void>> logout() async {
     try {
-      await localDataSource.deleteAccountById(
-          (await localDataSource.getCurrentAccount()).userInfo.id);
-      return Right(await remoteDataSource.logout());
+      final current = await localDataSource.getCurrentAccount();
+      return Right(
+          await localDataSource.deleteAccountById(current.userInfo.id));
     } on CacheException {
       return Left(CacheFailure());
-    } on ServerException {
-      return Left(ServerFailure());
     }
   }
 }

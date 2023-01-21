@@ -8,7 +8,7 @@ import '../entities/account_entity.dart';
 class LoginParams {
   final AuthInfo authInfo;
 
-  LoginParams(this.authInfo);
+  LoginParams({required this.authInfo});
 }
 
 class LoginUseCase implements UseCase<AccountEntity, LoginParams> {

@@ -5,7 +5,7 @@ import 'package:eljur_students/features/eljur_auth/domain/entities/account_entit
 abstract class AccountsRepository {
   Future<Either<Failure, AccountEntity>> getCurrentAccount();
   Future<Either<Failure, AccountEntity>> login(AuthInfo authInfo);
-  Future<Either<Failure, AccountEntity>> logout();
+  Future<Either<Failure, void>> logout();
   Future<Either<Failure, List<AccountEntity>>> getLocalAccounts();
-  Future<Either<Failure, AccountEntity>> deleteAccount(int id);
+  Future<Either<Failure, void>> deleteAccount(String id);
 }
