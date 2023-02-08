@@ -40,7 +40,9 @@ class AccountsRepositoryImpl implements AccountsRepository {
   @override
   Future<Either<Failure, AccountEntity>> fetchCurrentAccount() async {
     try {
-      return Right(_currentAccount = await localDataSource.getCurrentAccount());
+      _currentAccount = await localDataSource.getCurrentAccount();
+      notifier.set(_currentAccount!.userInfo.id);
+      return Right(_currentAccount!);
     } on CacheException {
       return Left(CacheFailure());
     }

@@ -53,7 +53,7 @@ class HomeworkModel extends Homework {
   factory HomeworkModel.fromJson(Map<String, dynamic> json) => HomeworkModel(
       value: json['value'],
       individual: json['individual'],
-      files: (json['files'] as List<Map<String, dynamic>>)
+      files: (json['files'] as List<dynamic>)
           .map((e) => FileModel.fromJson(e))
           .toList());
 
@@ -106,12 +106,12 @@ class LessonModel extends Lesson {
       name: json['name'],
       room: json['room'],
       teacher: json['teacher'],
-      startTime: json['startTime'],
-      endTime: json['endTime'],
-      assessments: (json['assessments'] as List<Map<String, dynamic>>)
+      startTime: TimeModel.fromJson(json['startTime']),
+      endTime: TimeModel.fromJson(json['endTime']),
+      assessments: (json['assessments'] as List<dynamic>)
           .map((e) => AssessmentModel.fromJson(e))
           .toList(),
-      homeworks: (json['homework'] as List<Map<String, dynamic>>)
+      homeworks: (json['homeworks'] as List<dynamic>)
           .map((e) => HomeworkModel.fromJson(e))
           .toList());
 
@@ -146,8 +146,8 @@ class ScheduleDayModel extends ScheduleDay {
   factory ScheduleDayModel.fromJson(Map<String, dynamic> json) =>
       ScheduleDayModel(
           dateTime: DateTime.parse(json['dateTime']),
-          items: (json['items'] as List<Map<String, dynamic>>)
-              .map((e) => LessonModel.fromApiJson(e))
+          items: (json['items'] as List<dynamic>)
+              .map((e) => LessonModel.fromJson(e))
               .toList());
 
   Map<String, dynamic> toJson() => {

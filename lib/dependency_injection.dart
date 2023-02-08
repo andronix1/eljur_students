@@ -28,8 +28,8 @@ Future<void> init() async {
 
   // Core
   locator.registerLazySingleton<EljurUriFormer>(() => EljurUriFormerImpl());
-  locator
-      .registerLazySingleton(() => DynamicDbNotifier(mainFolderName: _saveDir));
+  var notifier = DynamicDbNotifier(mainFolderName: _saveDir);
+  locator.registerSingleton(notifier);
 
   await _initAuth();
   await _initSchedule();
@@ -43,9 +43,6 @@ Future<void> _initAuth() async {
   locator.registerFactory(() => AuthBloc(loginUseCase: locator()));
 
   // Data sources
-  locator.registerLazySingleton(
-      () => LoadingDb(dbFilename: join(_saveDir, 'accounts.db')),
-      instanceName: "accountsDb");
   locator.registerLazySingleton<AccountsLocalDataSource>(() =>
       AccountsLocalDataSourceImpl(
           database: locator(instanceName: "accountsDb")));
@@ -64,6 +61,11 @@ Future<void> _initAuth() async {
       .registerLazySingleton(() => LoginUseCase(accountsRepository: locator()));
   locator.registerLazySingleton(
       () => LogoutUseCase(accountsRepository: locator()));
+
+  //External
+  locator.registerLazySingleton(
+      () => LoadingDb(dbFilename: join(_saveDir, 'accounts.db')),
+      instanceName: "accountsDb");
 }
 
 Future<void> _initSchedule() async {
@@ -71,10 +73,9 @@ Future<void> _initSchedule() async {
   locator.registerFactory(() => ScheduleBloc(getSchedule: locator()));
 
   // Data sources
-  locator.registerLazySingleton(
-      () => DynamicDb(notifier: locator(), dbFilename: 'schedule.db'));
-  locator.registerLazySingleton<ScheduleLocalDataSource>(
-      () => ScheduleLocalDataSourceImpl(dynamicDb: locator()));
+  locator.registerLazySingleton<ScheduleLocalDataSource>(() =>
+      ScheduleLocalDataSourceImpl(
+          dynamicDb: locator(instanceName: 'scheduleDb')));
   locator.registerLazySingleton<ScheduleRemoteDataSource>(
       () => ScheduleRemoteDataSourceImpl(eljurUriFormer: locator()));
 
@@ -88,4 +89,8 @@ Future<void> _initSchedule() async {
       .registerLazySingleton(() => GetScheduleUseCase(repository: locator()));
   locator.registerLazySingleton(
       () => GetScheduleForDateUseCase(repository: locator()));
+
+  //External
+  var scheduleDb = DynamicDb(notifier: locator(), dbFilename: 'schedule.db');
+  locator.registerSingleton(scheduleDb, instanceName: 'scheduleDb');
 }

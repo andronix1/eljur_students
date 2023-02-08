@@ -19,15 +19,19 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
   Future<Either<Failure, List<ScheduleDay>>> getSchedule() async {
     DateTime now = DateTime.now();
     try {
-      return Right(await remoteDataSource.getSchedule(
+      var schedule = await remoteDataSource.getSchedule(
           now.add(Duration(days: -now.weekday)),
-          now.add(Duration(days: 7 - now.weekday))));
+          now.add(Duration(days: 7 - now.weekday)));
+      await localDataSource.cacheSchedule(schedule);
+      return Right(schedule);
     } on ServerException {
       try {
         return Right(await localDataSource.getSchedule());
       } on CacheException {
         return Left(CacheFailure());
       }
+    } on CacheException {
+      return Left(CacheFailure());
     }
   }
 

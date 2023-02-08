@@ -18,7 +18,8 @@ class ScheduleLocalDataSourceImpl implements ScheduleLocalDataSource {
   Future<List<ScheduleDayModel>> getSchedule() async {
     final result = await store.record('schedule').get(await dynamicDb.database);
     if (result == null) throw CacheException();
-    return (result as List<Map<String, dynamic>>)
+    return (result as List<dynamic>)
+        .toList()
         .map((e) => ScheduleDayModel.fromJson(e))
         .toList();
   }
@@ -27,7 +28,9 @@ class ScheduleLocalDataSourceImpl implements ScheduleLocalDataSource {
   Future<void> cacheSchedule(List<ScheduleDayModel> schedule) async =>
       store.record('schedule').put(
           await dynamicDb.database,
-          schedule.map(
-            (e) => e.toJson(),
-          ));
+          schedule
+              .map(
+                (e) => e.toJson(),
+              )
+              .toList());
 }
