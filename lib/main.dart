@@ -1,24 +1,9 @@
+import 'package:eljur_students/app.dart';
 import 'package:eljur_students/dependency_injection.dart' as di;
-import 'package:eljur_students/features/eljur_auth/presentation/pages/auth_page.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const AuthPage(),
-    );
-  }
+  runApp(const App());
 }

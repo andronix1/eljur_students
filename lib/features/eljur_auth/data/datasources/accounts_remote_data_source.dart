@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:eljur_students/core/eljur/eljur_uri_former.dart';
+import 'package:eljur_students/core/eljur_uri_former.dart';
 import 'package:eljur_students/core/errors/exceptions/server_exception.dart';
 import 'package:eljur_students/features/eljur_auth/domain/entities/account_entity.dart';
 import 'package:http/http.dart' as http;

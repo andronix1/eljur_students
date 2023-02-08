@@ -1,5 +1,4 @@
-import 'dart:ffi';
-
+import 'package:eljur_students/core/dynamic_db/dynamic_db_notifier.dart';
 import 'package:eljur_students/core/errors/exceptions/cache_exception.dart';
 import 'package:eljur_students/core/errors/exceptions/server_exception.dart';
 import 'package:eljur_students/core/errors/failures/cache_failure.dart';
@@ -17,9 +16,17 @@ class AuthFailure extends Failure {}
 class AccountsRepositoryImpl implements AccountsRepository {
   final AccountsLocalDataSource localDataSource;
   final AccountsRemoteDataSource remoteDataSource;
+  final DynamicDbNotifier notifier;
+
+  AccountEntity? _currentAccount;
+
+  @override
+  AccountEntity? get currentAccount => _currentAccount;
 
   AccountsRepositoryImpl(
-      {required this.localDataSource, required this.remoteDataSource});
+      {required this.notifier,
+      required this.localDataSource,
+      required this.remoteDataSource});
 
   @override
   Future<Either<Failure, void>> deleteAccount(String id) async {
@@ -31,9 +38,9 @@ class AccountsRepositoryImpl implements AccountsRepository {
   }
 
   @override
-  Future<Either<Failure, AccountEntity>> getCurrentAccount() async {
+  Future<Either<Failure, AccountEntity>> fetchCurrentAccount() async {
     try {
-      return Right(await localDataSource.getCurrentAccount());
+      return Right(_currentAccount = await localDataSource.getCurrentAccount());
     } on CacheException {
       return Left(CacheFailure());
     }
@@ -53,7 +60,8 @@ class AccountsRepositoryImpl implements AccountsRepository {
     try {
       final account = await remoteDataSource.authenticate(authInfo);
       await localDataSource.cacheAccount(account);
-      return Right(account);
+      notifier.set(account.userInfo.id);
+      return Right(_currentAccount = account);
     } on CacheException {
       return Left(CacheFailure());
     } on ServerException {
@@ -66,9 +74,8 @@ class AccountsRepositoryImpl implements AccountsRepository {
   @override
   Future<Either<Failure, void>> logout() async {
     try {
-      final current = await localDataSource.getCurrentAccount();
-      return Right(
-          await localDataSource.deleteAccountById(current.userInfo.id));
+      _currentAccount = null;
+      return Right(await localDataSource.clearCurrentAccount());
     } on CacheException {
       return Left(CacheFailure());
     }
