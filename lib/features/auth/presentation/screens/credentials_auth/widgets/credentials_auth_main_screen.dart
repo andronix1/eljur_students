@@ -29,24 +29,17 @@ class _CredentialsAuthMainScreenState extends State<CredentialsAuthMainScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             "Вход",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-            ),
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
           const SizedBox(height: 50),
           TextField(
             controller: usernameInputController,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-            ),
           ),
           const SizedBox(height: 10),
           TextField(
             decoration: InputDecoration(
-              border: const OutlineInputBorder(),
               suffixIcon: IconButton(
                 icon: const Icon(Icons.password),
                 onPressed: () => setState(() {

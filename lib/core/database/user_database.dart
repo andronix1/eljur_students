@@ -23,19 +23,19 @@ class CurrentUserDatabase {
       join(dbDirectory.path, 'user$userId.db');
 
   void _onUserChanged(UserId? userId) {
-      _database = userId == null
-          ? Future.value(null)
-          : databaseFactoryIo
-              .openDatabase(_getDbPathFromId(userId));
+    _database = userId == null
+        ? Future.value(null)
+        : databaseFactoryIo.openDatabase(_getDbPathFromId(userId));
   }
 
   CurrentUserDatabase({required this.authProvider, required this.dbDirectory}) {
     _onUserChanged(authProvider.user?.userInfo.userId);
     authProvider.eventsListener.on(authProvider.currentUserChanged,
-        (user) => _onUserChanged(user.userInfo.userId));
-    authProvider.eventsListener.on(
-        authProvider.userDeleted,
-        (user) =>
-            File(_getDbPathFromId((user as User).userInfo.userId)).delete());
+        (user) => _onUserChanged((user as User?)?.userInfo.userId));
+    authProvider.eventsListener.on(authProvider.userDeleted, (user) {
+      if ((user as User?) != null) {
+        File(_getDbPathFromId((user as User).userInfo.userId)).delete();
+      }
+    });
   }
 }

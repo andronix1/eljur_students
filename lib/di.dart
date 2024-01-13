@@ -30,7 +30,7 @@ import 'package:sembast/sembast_io.dart';
 
 var getIt = GetIt.asNewInstance();
 
-void initUsersDi() {
+Future initUsersDi() async {
   getIt.registerLazySingleton<UsersDatabase>(
       () => SembastUsersDatabase(database: getIt(instanceName: 'authDb')));
 
@@ -58,6 +58,7 @@ void initUsersDi() {
   getIt.registerFactory(() => SelectUserCubit(provider: getIt()));
 
   getIt<Requester>().middlewares.insert(0, getIt<AuthMiddleware>());
+  await getIt<AuthProvider>().initDefaultUser();
 }
 
 void initDiaryDi() {
@@ -87,6 +88,6 @@ Future initDi() async {
       LoggerMiddleware(logResponses: true, logUris: true)
     ]));
 
-  initUsersDi();
+  await initUsersDi();
   initDiaryDi();
 }

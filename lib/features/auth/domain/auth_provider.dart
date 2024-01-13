@@ -17,6 +17,14 @@ class AuthProvider {
 
   AuthProvider({required this.repository});
 
+  Future<Failable<void>> initDefaultUser() =>
+      repository.getDefaultUser().andThen((info) {
+        if (info is DefaultUserSelected) {
+          _user = info.user;
+        }
+        return const Ok(Null);
+      });
+
   Future<Failable<void>> deleteUser(UserId userId) =>
       repository.getUser(userId).then((result) => result
               .mapAsync((user) => repository
@@ -27,19 +35,20 @@ class AuthProvider {
             return Ok(user);
           }));
 
-  void signOut() {
-    _user = null;
-    eventsListener.emit(currentUserChanged, null);
+  Future<Failable<void>> signOut() async {
+    return (await repository.clearDefaultUser()).andThen((p0) {
+      _user = null;
+      eventsListener.emit(currentUserChanged, null);
+      return const Ok(Null);
+    });
   }
 
   Future<Failable<void>> selectUser(UserId userId) =>
-      repository.getUser(userId).then((result) {
-        return result.fold((user) {
-          _user = user;
-          print('USER ${user.userInfo.userId}');
-          eventsListener.emit(currentUserChanged, user);
-          return user;
-        }, (failure) => failure);
+      repository.getUser(userId).andThenAsync((user) async {
+        repository.setDefaultUser(user.userInfo.userId);
+        _user = user;
+        eventsListener.emit(currentUserChanged, user);
+        return const Ok(Null);
       });
 
   Future<Failable<User>> auth(AuthMethod authMethod) =>

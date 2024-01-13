@@ -11,12 +11,19 @@ class SembastScheduleDayDto {
 
   SembastScheduleDayDto({required this.lessons, required this.isVacation});
 
-  factory SembastScheduleDayDto.fromJson(Map<String, dynamic> json) => _$SembastScheduleDayDtoFromJson(json);
+  factory SembastScheduleDayDto.fromJson(Map<String, dynamic> json) =>
+      _$SembastScheduleDayDtoFromJson(json);
   Map<String, dynamic> toJson() => _$SembastScheduleDayDtoToJson(this);
 
-  factory SembastScheduleDayDto.fromScheduleDay(ScheduleDay day) => switch(day) {
-    ScheduleWorkDay(lessons: var lessons) => SembastScheduleDayDto(isVacation: false, lessons: lessons.map(SembastLessonDto.fromLesson).toList()),
-    ScheduleVacationDay() => SembastScheduleDayDto(lessons: [], isVacation: true)
-  };
-  ScheduleDay toScheduleDay() => isVacation ? ScheduleVacationDay() as ScheduleDay : ScheduleWorkDay(lessons: lessons.map((e) => e.toLesson()).toList());
+  factory SembastScheduleDayDto.fromScheduleDay(ScheduleDay day) =>
+      switch (day) {
+        ScheduleWorkDay(lessons: var lessons) => SembastScheduleDayDto(
+            isVacation: false,
+            lessons: lessons.map(SembastLessonDto.fromLesson).toList()),
+        ScheduleVacationDay() =>
+          SembastScheduleDayDto(lessons: [], isVacation: true)
+      };
+  ScheduleDay toScheduleDay() => isVacation
+      ? ScheduleVacationDay()
+      : ScheduleWorkDay(lessons: lessons.map((e) => e.toLesson()).toList());
 }

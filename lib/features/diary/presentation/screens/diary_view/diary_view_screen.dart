@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:eljur_students/core/failure/cache_failure.dart';
 import 'package:eljur_students/core/failure/failure.dart';
 import 'package:eljur_students/core/failure/server_failure.dart';
@@ -13,6 +14,7 @@ import 'package:eljur_students/features/diary/presentation/screens/diary_view/sc
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+@RoutePage()
 class DiaryViewScreen extends StatelessWidget {
   const DiaryViewScreen({super.key});
 
@@ -164,14 +166,16 @@ class DayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         Text(
           _getDateString(),
-          style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+          style: theme.textTheme.headlineLarge,
         ),
         Text(
           _getWeekDay(),
+          style: theme.textTheme.labelLarge,
         ),
         const SizedBox(
           height: 10,
@@ -225,16 +229,17 @@ class Vacation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    final theme = Theme.of(context);
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(
+        const Icon(
           Icons.weekend_rounded,
           size: 100,
         ),
         Text(
           'выходной',
-          style: TextStyle(fontSize: 20),
+          style: theme.textTheme.titleLarge,
         ),
       ],
     );
@@ -257,6 +262,7 @@ class LessonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Card(
         child: Padding(
       padding: const EdgeInsets.all(8.0),
@@ -265,7 +271,7 @@ class LessonCard extends StatelessWidget {
         children: [
           Text(
             _getLessonTime(),
-            style: const TextStyle(fontSize: 10),
+            style: theme.textTheme.labelSmall,
           ),
           NameAndRoom(
             name: _getFullLessonName(),
@@ -273,26 +279,18 @@ class LessonCard extends StatelessWidget {
           ),
           Text(
             lesson.teacher,
-            style: const TextStyle(fontSize: 10),
+            style: theme.textTheme.labelSmall,
           ),
-          if (lesson.homework.isNotEmpty) Homework(homework: lesson.homework)
+          if (lesson.homework.isNotEmpty)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: lesson.homework
+                  .map((task) => HomeworkTaskWidget(task: task))
+                  .toList(),
+            )
         ],
       ),
     ));
-  }
-}
-
-class Homework extends StatelessWidget {
-  const Homework({super.key, required this.homework});
-
-  final List<HomeworkTask> homework;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: homework.map((task) => HomeworkTaskWidget(task: task)).toList(),
-    );
   }
 }
 
@@ -303,22 +301,17 @@ class HomeworkTaskWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (task.text.isNotEmpty) Text(task.text),
-            if (task.files.isNotEmpty)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children:
-                    task.files.map((file) => FileView(file: file)).toList(),
-              )
-          ],
-        ),
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Divider(),
+        if (task.text.isNotEmpty) Text(task.text),
+        if (task.files.isNotEmpty)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: task.files.map((file) => FileView(file: file)).toList(),
+          )
+      ],
     );
   }
 }
@@ -330,11 +323,12 @@ class FileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return ElevatedButton(
         onPressed: () {},
         child: Text(
           file.value,
-          style: const TextStyle(fontSize: 10),
+          style: theme.textTheme.labelSmall,
         ));
   }
 }
@@ -350,6 +344,7 @@ class NameAndRoom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Row(
       children: [
         Expanded(
@@ -357,13 +352,16 @@ class NameAndRoom extends StatelessWidget {
             name,
             softWrap: false,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 22),
+            style: theme.textTheme.titleLarge,
           ),
         ),
         const SizedBox(
           width: 20,
         ),
-        Text(room),
+        Text(
+          room,
+          style: theme.textTheme.labelMedium,
+        ),
       ],
     );
   }

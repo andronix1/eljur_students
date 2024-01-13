@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:eljur_students/di.dart';
 import 'package:eljur_students/features/auth/presentation/screens/credentials_auth/credentials_auth_cubit.dart';
 import 'package:eljur_students/features/auth/presentation/screens/credentials_auth/credentials_auth_state.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+@RoutePage()
 class CredentialsAuthScreen extends StatelessWidget {
   const CredentialsAuthScreen({super.key});
 
@@ -27,7 +29,7 @@ class CredentialsAuthScreen extends StatelessWidget {
                 CredentialsAuthSuccess(userInfo: var userInfo) =>
                   CredentialsAuthAuthenticatedScreen(
                     userName: '${userInfo.middleName} ${userInfo.firstName}',
-                    onContinue: () => context.go('/auth'),
+                    onContinue: () => context.pop(),
                   ),
               }),
     );

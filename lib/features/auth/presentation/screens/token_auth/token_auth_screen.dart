@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:eljur_students/di.dart';
 import 'package:eljur_students/features/auth/domain/models/auth_info.dart';
 import 'package:eljur_students/features/auth/presentation/screens/token_auth/token_auth_cubit.dart';
@@ -6,6 +7,7 @@ import 'package:eljur_students/features/auth/presentation/screens/token_auth/wid
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+@RoutePage()
 class TokenAuthScreen extends StatelessWidget {
   const TokenAuthScreen({super.key});
 

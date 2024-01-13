@@ -5,15 +5,15 @@ class CredentialsAuthLoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           "подождите...",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.headlineLarge,
         ),
-        SizedBox(height: 40),
-        CircularProgressIndicator()
+        const SizedBox(height: 40),
+        const CircularProgressIndicator()
       ],
     );
   }

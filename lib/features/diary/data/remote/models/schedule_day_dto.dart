@@ -29,6 +29,6 @@ class ScheduleDayDto {
       _$ScheduleDayDtoFromJson(json);
 
   ScheduleDay toScheduleDay() => lessons.isEmpty
-      ? ScheduleVacationDay() as ScheduleDay
+      ? ScheduleVacationDay()
       : ScheduleWorkDay(lessons: lessons.map((e) => e.toLesson()).toList());
 }

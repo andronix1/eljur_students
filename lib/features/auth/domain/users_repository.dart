@@ -7,6 +7,16 @@ import 'package:oxidized/oxidized.dart';
 
 class NoSuchUserFailure extends Failure {}
 
+sealed class DefaultUser {}
+
+class NoDefaultUserSelected extends DefaultUser {}
+
+class DefaultUserSelected extends DefaultUser {
+  final User user;
+
+  DefaultUserSelected({required this.user});
+}
+
 class UsersRepository {
   final UsersDatabase database;
   final UsersRemote remote;
@@ -21,4 +31,8 @@ class UsersRepository {
   Future<Failable<User>> auth(AuthMethod authMethod) =>
       remote.getUser(authMethod).andThenAsync((user) =>
           database.addUser(user).then((result) => result.map((_) => user)));
+  Future<Failable<void>> setDefaultUser(UserId userId) =>
+      database.setDefaultUser(userId);
+  Future<Failable<DefaultUser>> getDefaultUser() => database.getDefaultUser();
+  Future<Failable<void>> clearDefaultUser() => database.clearDefaultUser();
 }

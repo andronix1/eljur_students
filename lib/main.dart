@@ -1,41 +1,28 @@
 import 'package:eljur_students/di.dart';
-import 'package:eljur_students/features/auth/presentation/routes.dart';
-import 'package:eljur_students/features/diary/presentation/screens/diary_view/diary_view_screen.dart';
+import 'package:eljur_students/features/auth/domain/auth_provider.dart';
+import 'package:eljur_students/router/app_router.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initDi();
-  runApp(MyApp());
+  runApp(EljurStudentsApp());
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
+class EljurStudentsApp extends StatelessWidget {
+  EljurStudentsApp({super.key});
 
-  final GoRouter router = GoRouter(routes: [
-    StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) => Scaffold(
-              body: SafeArea(child: navigationShell),
-            ),
-        branches: [
-          getAuthBranch(),
-          StatefulShellBranch(routes: [
-            GoRoute(
-                path: '/app',
-                builder: (context, state) => const DiaryViewScreen())
-          ])
-        ])
-  ], initialLocation: '/auth');
+  final _router =
+      AppRouter(initialAuthenticated: getIt<AuthProvider>().user != null);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Eljur.Students',
+      title: 'элжур студентс',
       theme: ThemeData.dark(
         useMaterial3: true,
       ),
-      routerConfig: router,
+      routerConfig: _router.config(),
     );
   }
 }

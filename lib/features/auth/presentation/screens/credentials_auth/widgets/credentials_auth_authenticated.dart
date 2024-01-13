@@ -14,10 +14,7 @@ class CredentialsAuthAuthenticatedScreen extends StatelessWidget {
       children: [
         Text(
           "Здравствуйте, $userName",
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         const SizedBox(height: 20),
         ElevatedButton(onPressed: onContinue, child: const Text("Продолжить"))

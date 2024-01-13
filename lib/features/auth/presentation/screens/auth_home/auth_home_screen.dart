@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:eljur_students/features/auth/presentation/widgets/select_user/select_user_widget.dart';
+import 'package:eljur_students/router/app_router.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
+@RoutePage()
 class AuthHomeScreen extends StatefulWidget {
   const AuthHomeScreen({super.key});
 
@@ -19,14 +21,15 @@ class _AuthHomeScreenState extends State<AuthHomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
+            Text(
               "Добро пожаловать в scheduler!",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              style: Theme.of(context).textTheme.headlineLarge,
             ),
+            const SizedBox(height: 10),
             const SelectUserWidget(),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             OutlinedButton(
-              onPressed: () => context.go('/auth/credentials'),
+              onPressed: () => context.pushRoute(const CredentialsAuthRoute()),
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -37,7 +40,7 @@ class _AuthHomeScreenState extends State<AuthHomeScreen> {
               ),
             ),
             OutlinedButton(
-              onPressed: () => context.go('/auth/token'),
+              onPressed: () => context.pushRoute(const TokenAuthRoute()),
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

@@ -1,10 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:eljur_students/di.dart';
 import 'package:eljur_students/features/auth/presentation/widgets/select_user/select_user_cubit.dart';
 import 'package:eljur_students/features/auth/presentation/widgets/select_user/select_user_state.dart';
 import 'package:eljur_students/features/auth/presentation/widgets/user_card.dart';
+import 'package:eljur_students/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class SelectUserWidget extends StatelessWidget {
   const SelectUserWidget({super.key});
@@ -44,7 +45,7 @@ class SelectUserWidget extends StatelessWidget {
           },
           listener: (context, state) {
             if (state is SelectUserSelectedState) {
-              context.go('/app');
+              context.navigateTo(MainAppRoute());
             }
           },
         ),
