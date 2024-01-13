@@ -16,7 +16,7 @@ import 'package:eljur_students/features/auth/domain/users_repository.dart';
 import 'package:eljur_students/features/auth/presentation/screens/credentials_auth/credentials_auth_cubit.dart';
 import 'package:eljur_students/features/auth/presentation/screens/token_auth/token_auth_cubit.dart';
 import 'package:eljur_students/features/auth/presentation/widgets/select_user/select_user_cubit.dart';
-import 'package:eljur_students/features/diary/data/local/sembast_diary_databse.dart';
+import 'package:eljur_students/features/diary/data/local/sembast_diary_database.dart';
 import 'package:eljur_students/features/diary/data/remote/diary_remote.dart';
 import 'package:eljur_students/features/diary/domain/dary_remote.dart';
 import 'package:eljur_students/features/diary/domain/diary_database.dart';
@@ -79,7 +79,7 @@ Future initDi() async {
       await databaseFactoryIo
           .openDatabase(join(applicationDocumentsPath.path, 'auth.db')),
       instanceName: 'authDb');
-  getIt.registerLazySingleton<CurrentUserDatabase>(() => CurrentUserDatabase(
+  getIt.registerLazySingleton<UserScopedDatabase>(() => UserScopedDatabase(
       authProvider: getIt(), dbDirectory: applicationDocumentsPath));
   getIt.registerSingleton<EljurUriFormer>(EljurUriFormerImpl());
   getIt.registerLazySingleton<Requester>(() => DioRequester(dio: Dio())

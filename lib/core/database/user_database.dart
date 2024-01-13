@@ -6,7 +6,7 @@ import 'package:path/path.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 
-class CurrentUserDatabase {
+class UserScopedDatabase {
   final Directory dbDirectory;
   final AuthProvider authProvider;
 
@@ -28,7 +28,7 @@ class CurrentUserDatabase {
         : databaseFactoryIo.openDatabase(_getDbPathFromId(userId));
   }
 
-  CurrentUserDatabase({required this.authProvider, required this.dbDirectory}) {
+  UserScopedDatabase({required this.authProvider, required this.dbDirectory}) {
     _onUserChanged(authProvider.user?.userInfo.userId);
     authProvider.eventsListener.on(authProvider.currentUserChanged,
         (user) => _onUserChanged((user as User?)?.userInfo.userId));

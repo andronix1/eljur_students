@@ -9,13 +9,11 @@ class DiaryRepository {
   final DiaryDatabase database;
   final DiaryRemote remote;
 
-  final int daysRange = 10;
-
   DiaryRepository({required this.database, required this.remote});
 
-  Future<Failable<Schedule>> getDefaultDiary() => remote
-      .getDiary(DateTime.now().add(Duration(days: -daysRange)),
-          DateTime.now().add(Duration(days: daysRange)))
+  Future<Failable<Schedule>> getDefaultDiary(int daysBefore, int daysAfter) => remote
+      .getDiary(DateTime.now().add(Duration(days: -daysBefore)),
+          DateTime.now().add(Duration(days: daysAfter)))
       .andThenAsync((schedule) async =>
           (await database.setSchedule(schedule)).map((_) => schedule))
       .orElseAsync((failure) => database.getSchedule());

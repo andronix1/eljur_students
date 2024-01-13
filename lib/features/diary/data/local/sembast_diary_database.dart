@@ -10,7 +10,7 @@ import 'package:sembast/sembast.dart';
 const String _defaultDiaryRecord = 'defaultDiary';
 
 class SembastDiaryDatabase implements DiaryDatabase {
-  final CurrentUserDatabase database;
+  final UserScopedDatabase database;
   final StoreRef<String, Map<String, dynamic>> store = StoreRef('diary');
 
   SembastDiaryDatabase({required this.database});
