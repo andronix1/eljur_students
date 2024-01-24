@@ -30,12 +30,10 @@ class CurrentUserDatabase {
 
   CurrentUserDatabase({required this.authProvider, required this.dbDirectory}) {
     _onUserChanged(authProvider.user?.userInfo.userId);
-    authProvider.eventsListener.on(authProvider.currentUserChanged,
-        (user) => _onUserChanged((user as User?)?.userInfo.userId));
-    authProvider.eventsListener.on(authProvider.userDeleted, (user) {
-      if ((user as User?) != null) {
-        File(_getDbPathFromId((user as User).userInfo.userId)).delete();
-      }
+    authProvider.userChanged
+        .subscribe((user) => _onUserChanged(user?.userInfo.userId));
+    authProvider.userDeleted.subscribe((user) {
+      File(_getDbPathFromId(user.userInfo.userId)).delete();
     });
   }
 }

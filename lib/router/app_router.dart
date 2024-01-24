@@ -5,7 +5,7 @@ import 'package:eljur_students/features/auth/presentation/screens/token_auth/tok
 import 'package:eljur_students/features/diary/presentation/screens/diary_view/diary_view_screen.dart';
 import 'package:eljur_students/features/settings/presentation/settings_screen.dart';
 import 'package:eljur_students/router/presentation/main_app.dart';
-import 'package:eljur_students/router/presentation/simple_container.dart';
+import 'package:eljur_students/router/presentation/auth_app.dart';
 
 part 'app_router.gr.dart';
 
@@ -26,6 +26,7 @@ class AppRouter extends _$AppRouter {
         AutoRoute(
             page: MainAppRoute.page,
             initial: initialAuthenticated,
+            keepHistory: false,
             children: [
               AutoRoute(page: DiaryViewRoute.page, initial: true),
               AutoRoute(page: SettingsRoute.page),

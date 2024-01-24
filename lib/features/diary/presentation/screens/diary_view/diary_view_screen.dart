@@ -13,6 +13,7 @@ import 'package:eljur_students/features/diary/presentation/screens/diary_view/di
 import 'package:eljur_students/features/diary/presentation/screens/diary_view/schedule_day_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage()
 class DiaryViewScreen extends StatelessWidget {
@@ -325,7 +326,7 @@ class FileView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return ElevatedButton(
-        onPressed: () {},
+        onPressed: () => launchUrl(file.destination),
         child: Text(
           file.value,
           style: theme.textTheme.labelSmall,

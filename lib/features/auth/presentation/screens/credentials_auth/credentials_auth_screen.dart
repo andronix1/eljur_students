@@ -7,7 +7,6 @@ import 'package:eljur_students/features/auth/presentation/screens/credentials_au
 import 'package:eljur_students/features/auth/presentation/screens/credentials_auth/widgets/credentials_auth_main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 @RoutePage()
 class CredentialsAuthScreen extends StatelessWidget {
@@ -29,7 +28,7 @@ class CredentialsAuthScreen extends StatelessWidget {
                 CredentialsAuthSuccess(userInfo: var userInfo) =>
                   CredentialsAuthAuthenticatedScreen(
                     userName: '${userInfo.middleName} ${userInfo.firstName}',
-                    onContinue: () => context.pop(),
+                    onContinue: () => context.router.pop(),
                   ),
               }),
     );

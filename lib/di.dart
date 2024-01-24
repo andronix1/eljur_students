@@ -5,6 +5,8 @@ import 'package:eljur_students/core/eljur/requester.dart';
 import 'package:eljur_students/core/eljur/requesters/dio_requester.dart';
 import 'package:eljur_students/core/eljur/uri_middlewares/eljur_base_middleware.dart';
 import 'package:eljur_students/core/eljur/uri_middlewares/logger_middleware.dart';
+import 'package:eljur_students/core/event_listener/event_listener_factory.dart';
+import 'package:eljur_students/core/event_listener/id_generators/timestamp_id_generator.dart';
 import 'package:eljur_students/features/auth/data/auth_methods/credentials_auth_method.dart';
 import 'package:eljur_students/features/auth/data/auth_middleware.dart';
 import 'package:eljur_students/features/auth/data/local/sembast_users_database.dart';
@@ -41,7 +43,7 @@ Future initUsersDi() async {
       () => UsersRepository(database: getIt(), remote: getIt()));
 
   getIt.registerLazySingleton<AuthProvider>(
-      () => AuthProvider(repository: getIt()));
+      () => AuthProvider(repository: getIt(), eventListenerFactory: getIt()));
 
   getIt.registerLazySingleton<AuthMiddleware>(
       () => AuthMiddleware(provider: getIt()));
@@ -69,7 +71,7 @@ void initDiaryDi() {
   getIt.registerLazySingleton<DiaryRepository>(
       () => DiaryRepository(database: getIt(), remote: getIt()));
 
-  getIt.registerLazySingleton<DiaryViewCubit>(
+  getIt.registerFactory<DiaryViewCubit>(
       () => DiaryViewCubit(repository: getIt()));
 }
 
@@ -87,6 +89,9 @@ Future initDi() async {
       EljurBaseMiddleware(),
       LoggerMiddleware(logResponses: true, logUris: true)
     ]));
+
+  getIt.registerSingleton(
+      EventListenerFactory(generator: EventTimestampIdGenerator()));
 
   await initUsersDi();
   initDiaryDi();

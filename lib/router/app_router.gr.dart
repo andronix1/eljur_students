@@ -36,13 +36,13 @@ abstract class _$AppRouter extends RootStackRouter {
     MainAppRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: MainAppScreen(),
+        child: const MainAppScreen(),
       );
     },
     AuthAppRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const ScaffoldWithSafeAreaScreen(),
+        child: const AuthAppScreen(),
       );
     },
     SettingsRoute.name: (routeData) {
@@ -104,32 +104,20 @@ class DiaryViewRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [MainAppScreen]
-class MainAppRoute extends PageRouteInfo<MainAppRouteArgs> {
-  MainAppRoute({
-    List<PageRouteInfo>? children,
-  }) : super(
+class MainAppRoute extends PageRouteInfo<void> {
+  const MainAppRoute({List<PageRouteInfo>? children})
+      : super(
           MainAppRoute.name,
-          args: MainAppRouteArgs(),
           initialChildren: children,
         );
 
   static const String name = 'MainAppRoute';
 
-  static const PageInfo<MainAppRouteArgs> page =
-      PageInfo<MainAppRouteArgs>(name);
-}
-
-class MainAppRouteArgs {
-  const MainAppRouteArgs();
-
-  @override
-  String toString() {
-    return 'MainAppRouteArgs';
-  }
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
-/// [ScaffoldWithSafeAreaScreen]
+/// [AuthAppScreen]
 class AuthAppRoute extends PageRouteInfo<void> {
   const AuthAppRoute({List<PageRouteInfo>? children})
       : super(

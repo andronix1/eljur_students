@@ -5,15 +5,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectUserCubit extends Cubit<SelectUserState> {
   final AuthProvider provider;
+  int _changedId = 0, _deletedId = 0;
 
   SelectUserCubit({required this.provider}) : super(SelectUserLoadingState()) {
     updateUsers();
-    provider.eventsListener.on(provider.currentUserChanged, (_) {
+    _changedId = provider.userChanged.subscribe((_) {
       updateUsers();
     });
-    provider.eventsListener.on(provider.userDeleted, (_) {
+    _deletedId = provider.userDeleted.subscribe((_) {
       updateUsers();
     });
+  }
+
+  @override
+  Future close() async {
+    await super.close();
+    provider.userChanged.unsubscribe(_changedId);
+    provider.userDeleted.unsubscribe(_deletedId);
   }
 
   void updateUsers() {
